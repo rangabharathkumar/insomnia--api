@@ -8,6 +8,11 @@ import os
 artifacts_dir = os.path.join(os.path.dirname(__file__), "artifacts")
 os.makedirs(artifacts_dir, exist_ok=True)
 
+# Define numerical columns
+NUMERICAL_COLS = ['Age', 'Sleep_Duration', 'Quality_of_Sleep', 
+                 'Physical_Activity_Level', 'Stress_Level', 
+                 'Heart_Rate', 'Daily_Steps']
+
 # Sample data for creating scaler
 data = {
     'Gender': ['Male', 'Female'],
@@ -26,9 +31,9 @@ data = {
 # Create DataFrame
 df = pd.DataFrame(data)
 
-# Create and save scaler
+# Create and save scaler with only numerical columns
 scaler = StandardScaler()
-scaler.fit(df.select_dtypes(include=[np.number]))
+scaler.fit(df[NUMERICAL_COLS])
 joblib.dump(scaler, os.path.join(artifacts_dir, "scaler.pkl"))
 
 print("Scaler created and saved successfully!") 

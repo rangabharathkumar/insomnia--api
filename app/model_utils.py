@@ -15,13 +15,19 @@ model = joblib.load(MODEL_PATH)
 label_encoders = joblib.load(ENCODERS_PATH)
 scaler = joblib.load(SCALER_PATH)
 
+# Define numerical columns that should be scaled
+NUMERICAL_COLS = ['Age', 'Sleep_Duration', 'Quality_of_Sleep', 
+                 'Physical_Activity_Level', 'Stress_Level', 
+                 'Heart_Rate', 'Daily_Steps']
+
 def preprocess_input(data: dict) -> np.ndarray:
     """
     Preprocess incoming data: encode categorical features and scale numerical ones.
     """
+    # Create DataFrame with consistent column order
     df = pd.DataFrame([data])
-
-    # Apply label encoding to categorical columns
+    
+    # First encode categorical columns
     for col, le in label_encoders.items():
         if col in df.columns:
             try:
@@ -29,14 +35,15 @@ def preprocess_input(data: dict) -> np.ndarray:
             except ValueError:
                 # Handle unseen labels by setting a default or most common label
                 df[col] = le.transform([le.classes_[0]])
-
-    # Get numerical columns
-    numerical_cols = df.select_dtypes(include=[np.number]).columns
     
-    # Apply scaling only to numerical columns
-    if len(numerical_cols) > 0:
-        df[numerical_cols] = scaler.transform(df[numerical_cols])
-
+    # Then scale only numerical columns
+    if len(NUMERICAL_COLS) > 0:
+        df[NUMERICAL_COLS] = scaler.transform(df[NUMERICAL_COLS])
+    
+    # Ensure columns are in the correct order
+    ordered_cols = list(label_encoders.keys()) + NUMERICAL_COLS
+    df = df[ordered_cols]
+    
     return df.values
 
 def predict(data: dict) -> str:
