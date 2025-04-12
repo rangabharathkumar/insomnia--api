@@ -9,23 +9,23 @@ artifacts_dir = os.path.join(os.path.dirname(__file__), "artifacts")
 os.makedirs(artifacts_dir, exist_ok=True)
 
 # Define numerical columns
-NUMERICAL_COLS = ['Age', 'Sleep_Duration', 'Quality_of_Sleep', 
-                 'Physical_Activity_Level', 'Stress_Level', 
-                 'Heart_Rate', 'Daily_Steps']
+NUMERICAL_COLS = ['Age', 'Sleep Duration', 'Quality of Sleep', 
+                 'Physical Activity Level', 'Stress Level', 
+                 'Heart Rate', 'Daily Steps']
 
 # Sample data for creating scaler
 data = {
     'Gender': ['Male', 'Female'],
     'Age': [25, 30],
     'Occupation': ['Software Engineer', 'Doctor'],
-    'Sleep_Duration': [7.5, 8.0],
-    'Quality_of_Sleep': [7, 8],
-    'Physical_Activity_Level': [5, 6],
-    'Stress_Level': [4, 3],
-    'BMI_Category': ['Normal', 'Overweight'],
-    'Blood_Pressure': ['120/80', '130/85'],
-    'Heart_Rate': [70, 75],
-    'Daily_Steps': [8000, 10000]
+    'Sleep Duration': [7.5, 8.0],
+    'Quality of Sleep': [7, 8],
+    'Physical Activity Level': [5, 6],
+    'Stress Level': [4, 3],
+    'BMI Category': ['Normal', 'Overweight'],
+    'Blood Pressure': ['120/80', '130/85'],
+    'Heart Rate': [70, 75],
+    'Daily Steps': [8000, 10000]
 }
 
 # Create DataFrame

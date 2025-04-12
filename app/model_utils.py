@@ -16,16 +16,19 @@ label_encoders = joblib.load(ENCODERS_PATH)
 scaler = joblib.load(SCALER_PATH)
 
 # Define numerical columns that should be scaled
-NUMERICAL_COLS = ['Age', 'Sleep_Duration', 'Quality_of_Sleep', 
-                 'Physical_Activity_Level', 'Stress_Level', 
-                 'Heart_Rate', 'Daily_Steps']
+NUMERICAL_COLS = ['Age', 'Sleep Duration', 'Quality of Sleep', 
+                 'Physical Activity Level', 'Stress Level', 
+                 'Heart Rate', 'Daily Steps']
 
 def preprocess_input(data: dict) -> np.ndarray:
     """
     Preprocess incoming data: encode categorical features and scale numerical ones.
     """
+    # Convert input data keys to match training format (replace underscores with spaces)
+    formatted_data = {k.replace('_', ' '): v for k, v in data.items()}
+    
     # Create DataFrame with consistent column order
-    df = pd.DataFrame([data])
+    df = pd.DataFrame([formatted_data])
     
     # First encode categorical columns
     for col, le in label_encoders.items():

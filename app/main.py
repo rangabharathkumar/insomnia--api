@@ -23,6 +23,23 @@ class InputData(BaseModel):
     Heart_Rate: int
     Daily_Steps: int
 
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "Gender": "Male",
+                "Age": 30,
+                "Occupation": "Software Engineer",
+                "Sleep_Duration": 7.5,
+                "Quality_of_Sleep": 8,
+                "Physical_Activity_Level": 5,
+                "Stress_Level": 4,
+                "BMI_Category": "Normal",
+                "Blood_Pressure": "120/80",
+                "Heart_Rate": 70,
+                "Daily_Steps": 8000
+            }
+        }
+
 @app.post("/predict")
 async def get_prediction(data: InputData):
     try:
