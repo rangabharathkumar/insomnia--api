@@ -1,7 +1,12 @@
 # app/main.py
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from app.model_utils import predict  # Ensure this path works when running from root
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = FastAPI(title="Insomnia Prediction API")
 
@@ -19,6 +24,12 @@ class InputData(BaseModel):
     Daily_Steps: int
 
 @app.post("/predict")
-def get_prediction(data: InputData):
-    result = predict(data.dict())
-    return {"prediction": result}
+async def get_prediction(data: InputData):
+    try:
+        logger.info(f"Received prediction request with data: {data.dict()}")
+        result = predict(data.dict())
+        logger.info(f"Prediction result: {result}")
+        return {"prediction": result}
+    except Exception as e:
+        logger.error(f"Error during prediction: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))

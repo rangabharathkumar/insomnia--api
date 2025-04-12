@@ -30,20 +30,28 @@ def preprocess_input(data: dict) -> np.ndarray:
                 # Handle unseen labels by setting a default or most common label
                 df[col] = le.transform([le.classes_[0]])
 
-    # Apply scaling
-    df_scaled = scaler.transform(df)
+    # Get numerical columns
+    numerical_cols = df.select_dtypes(include=[np.number]).columns
+    
+    # Apply scaling only to numerical columns
+    if len(numerical_cols) > 0:
+        df[numerical_cols] = scaler.transform(df[numerical_cols])
 
-    return df_scaled
+    return df.values
 
 def predict(data: dict) -> str:
     """
     Preprocess data and return model prediction.
     """
-    processed_data = preprocess_input(data)
-    prediction = model.predict(processed_data)[0]
+    try:
+        processed_data = preprocess_input(data)
+        prediction = model.predict(processed_data)[0]
 
-    # Optional: convert prediction to label
-    if hasattr(model, "classes_"):
-        prediction = model.classes_[prediction] if isinstance(prediction, (int, np.integer)) else prediction
+        # Optional: convert prediction to label
+        if hasattr(model, "classes_"):
+            prediction = model.classes_[prediction] if isinstance(prediction, (int, np.integer)) else prediction
 
-    return str(prediction)
+        return str(prediction)
+    except Exception as e:
+        print(f"Error in prediction: {str(e)}")
+        raise
